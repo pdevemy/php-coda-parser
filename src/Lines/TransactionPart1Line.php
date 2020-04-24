@@ -11,6 +11,8 @@ use Codelicious\Coda\Values\SequenceNumber;
 use Codelicious\Coda\Values\SequenceNumberDetail;
 use Codelicious\Coda\Values\StatementSequenceNumber;
 use Codelicious\Coda\Values\TransactionCode;
+use Codelicious\Coda\Values\NextCode;
+use Codelicious\Coda\Values\LinkCode;
 
 /**
  * @package Codelicious\Coda
@@ -39,6 +41,11 @@ class TransactionPart1Line implements LineInterface
 	private $statementSequenceNumber;
 	/** @var GlobalizationCode */
 	private $globalizationCode;
+	/** @var NextCode */
+    private $nextCode;
+    /** @var LinkCode */
+    private $linkCode;
+
 
 	public function __construct(
 		SequenceNumber $sequenceNumber,
@@ -50,7 +57,9 @@ class TransactionPart1Line implements LineInterface
 		MessageOrStructuredMessage $messageOrStructuredMessage,
 		Date $transactionDate,
 		StatementSequenceNumber $statementSequenceNumber,
-		GlobalizationCode $globalizationCode )
+		GlobalizationCode $globalizationCode,
+        NextCode $nextCode,
+        LinkCode $linkCode )
 	{
 		$this->sequenceNumber = $sequenceNumber;
 		$this->sequenceNumberDetail = $sequenceNumberDetail;
@@ -62,6 +71,8 @@ class TransactionPart1Line implements LineInterface
 		$this->transactionDate = $transactionDate;
 		$this->statementSequenceNumber = $statementSequenceNumber;
 		$this->globalizationCode = $globalizationCode;
+		$this->nextCode = $nextCode;
+		$this->linkCode = $linkCode;
 	}
 
 	public function getType(): LineType
@@ -118,4 +129,14 @@ class TransactionPart1Line implements LineInterface
 	{
 		return $this->globalizationCode;
 	}
+
+	public function getNextCode(): NextCode
+    {
+        return $this->nextCode;
+    }
+
+    public function getLinkCode(): LinkCode
+    {
+        return $this->linkCode;
+    }
 }

@@ -8,7 +8,9 @@ use Codelicious\Coda\Values\Amount;
 use Codelicious\Coda\Values\BankReference;
 use Codelicious\Coda\Values\Date;
 use Codelicious\Coda\Values\GlobalizationCode;
+use Codelicious\Coda\Values\LinkCode;
 use Codelicious\Coda\Values\MessageOrStructuredMessage;
+use Codelicious\Coda\Values\NextCode;
 use Codelicious\Coda\Values\SequenceNumber;
 use Codelicious\Coda\Values\SequenceNumberDetail;
 use Codelicious\Coda\Values\StatementSequenceNumber;
@@ -39,7 +41,9 @@ class TransactionPart1LineParser implements LineParserInterface
 			new MessageOrStructuredMessage(mb_substr($codaLine, 61, 54), $transactionCode),
 			new Date(mb_substr($codaLine, 115, 6)),
 			new StatementSequenceNumber(mb_substr($codaLine, 121, 3)),
-			new GlobalizationCode(mb_substr($codaLine, 124, 1))
+			new GlobalizationCode(mb_substr($codaLine, 124, 1)),
+            new NextCode(mb_substr($codaLine, 125, 1)),
+            new LinkCode(mb_substr($codaLine, 127, 1))
 		);
 	}
 	

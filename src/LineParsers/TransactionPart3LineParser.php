@@ -5,7 +5,9 @@ namespace Codelicious\Coda\LineParsers;
 use Codelicious\Coda\Lines\TransactionPart3Line;
 use Codelicious\Coda\Values\AccountFull;
 use Codelicious\Coda\Values\AccountName;
+use Codelicious\Coda\Values\LinkCode;
 use Codelicious\Coda\Values\Message;
+use Codelicious\Coda\Values\NextCode;
 use Codelicious\Coda\Values\SequenceNumber;
 use Codelicious\Coda\Values\SequenceNumberDetail;
 
@@ -27,7 +29,9 @@ class TransactionPart3LineParser implements LineParserInterface
 			new SequenceNumberDetail(mb_substr($codaLine, 6, 4)),
 			new AccountFull(mb_substr($codaLine, 10, 37)),
 			new AccountName(mb_substr($codaLine, 47, 35)),
-			new Message(mb_substr($codaLine, 82, 43))
+			new Message(mb_substr($codaLine, 82, 43)),
+            new NextCode(mb_substr($codaLine, 125, 1)),
+            new LinkCode(mb_substr($codaLine, 127, 1))
 		);
 	}
 

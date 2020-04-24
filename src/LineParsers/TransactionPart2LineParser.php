@@ -7,7 +7,9 @@ use Codelicious\Coda\Values\Bic;
 use Codelicious\Coda\Values\CategoryPurpose;
 use Codelicious\Coda\Values\ClientReference;
 use Codelicious\Coda\Values\IsoReasonReturnCode;
+use Codelicious\Coda\Values\LinkCode;
 use Codelicious\Coda\Values\Message;
+use Codelicious\Coda\Values\NextCode;
 use Codelicious\Coda\Values\Purpose;
 use Codelicious\Coda\Values\SequenceNumber;
 use Codelicious\Coda\Values\SequenceNumberDetail;
@@ -35,7 +37,9 @@ class TransactionPart2LineParser implements LineParserInterface
 			new TransactionCodeType(mb_substr($codaLine, 112, 1)),
 			new IsoReasonReturnCode(mb_substr($codaLine, 113, 4)),
 			new CategoryPurpose(mb_substr($codaLine, 117, 4)),
-			new Purpose(mb_substr($codaLine, 121, 4))
+			new Purpose(mb_substr($codaLine, 121, 4)),
+            new NextCode(mb_substr($codaLine, 125, 1)),
+            new LinkCode(mb_substr($codaLine, 127, 1))
 		);
 	}
 

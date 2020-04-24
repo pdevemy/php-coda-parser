@@ -11,6 +11,8 @@ use Codelicious\Coda\Values\Purpose;
 use Codelicious\Coda\Values\SequenceNumber;
 use Codelicious\Coda\Values\SequenceNumberDetail;
 use Codelicious\Coda\Values\TransactionCodeType;
+use Codelicious\Coda\Values\NextCode;
+use Codelicious\Coda\Values\LinkCode;
 
 /**
  * @package Codelicious\Coda
@@ -37,6 +39,10 @@ class TransactionPart2Line implements LineInterface
 	private $categoryPurpose;
 	/** @var Purpose */
 	private $purpose;
+    /** @var NextCode */
+    private $nextCode;
+    /** @var LinkCode */
+    private $linkCode;
 	
 	public function __construct(
 		SequenceNumber $sequenceNumber,
@@ -47,7 +53,9 @@ class TransactionPart2Line implements LineInterface
 		TransactionCodeType $transactionType,
 		IsoReasonReturnCode $isoReasonReturnCode,
 		CategoryPurpose $categoryPurpose,
-		Purpose $purpose )
+		Purpose $purpose,
+        NextCode $nextCode,
+        LinkCode $linkCode )
 	{
 		
 		$this->sequenceNumber = $sequenceNumber;
@@ -59,6 +67,8 @@ class TransactionPart2Line implements LineInterface
 		$this->isoReasonReturnCode = $isoReasonReturnCode;
 		$this->categoryPurpose = $categoryPurpose;
 		$this->purpose = $purpose;
+        $this->nextCode = $nextCode;
+        $this->linkCode = $linkCode;
 	}
 	
 	public function getType(): LineType
@@ -110,4 +120,14 @@ class TransactionPart2Line implements LineInterface
 	{
 		return $this->purpose;
 	}
+
+    public function getNextCode(): NextCode
+    {
+        return $this->nextCode;
+    }
+
+    public function getLinkCode(): LinkCode
+    {
+        return $this->linkCode;
+    }
 }

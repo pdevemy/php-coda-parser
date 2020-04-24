@@ -2,6 +2,7 @@
 
 namespace Codelicious\Coda\StatementParsers;
 
+use Codelicious\Coda\Statements\Transaction;
 use function Codelicious\Coda\Helpers\filterLinesOfTypes;
 use function Codelicious\Coda\Helpers\getFirstLineOfType;
 use Codelicious\Coda\Lines\IdentificationLine;
@@ -59,7 +60,8 @@ class StatementParser
 				[
 					new LineType(LineType::Message)
 				]
-			));
+			)
+        );
 		
 		$accountParser = new AccountParser();
 		$account = $accountParser->parse(
@@ -91,7 +93,9 @@ class StatementParser
 			function(array $lines) use ($transactionParser) {
 				return $transactionParser->parse($lines);
 			}, $transactionLines);
-		
+
+		$transactions = $this->getTransactionTree($transactions);
+
 		return new Statement(
 			$date,
 			$account,
@@ -109,23 +113,52 @@ class StatementParser
 	private function groupTransactions(array $lines): array
 	{
 		$transactions = [];
+		$transactionDetails = [];
 		$idx = -1;
-		$sequenceNumber = -1;
+        $endTransaction = false;
 		
 		foreach ($lines as $line) {
 			/** @var TransactionPart1Line|TransactionPart2Line|TransactionPart3Line|InformationPart1Line|InformationPart2Line|InformationPart3Line $transactionOrInformationLine */
 			$transactionOrInformationLine = $line;
 			
-			if (!$transactions || $sequenceNumber != $transactionOrInformationLine->getSequenceNumber()->getValue()) {
-				$sequenceNumber = $transactionOrInformationLine->getSequenceNumber()->getValue();
-				$idx += 1;
-				
-				$transactions[$idx] = [];
+			if (   !$transactions
+                || $endTransaction
+            ) {
+                $idx += 1;
+                $transactions[$idx] = [];
+				$endTransaction = false;
 			}
-			
-			$transactions[$idx][] = $transactionOrInformationLine;
+
+    	    $transactions[$idx][] = $transactionOrInformationLine;
+
+            if ($transactionOrInformationLine->getNextCode()->getValue() == 0 && $transactionOrInformationLine->getLinkCode()->getValue() == 0) {
+                $endTransaction = true;
+            }
 		}
-		
 		return $transactions;
 	}
+
+    /**
+     * @param Transaction[] $transactions
+     * @return Transaction[]
+     */
+	private function getTransactionTree(array $transactions): array
+    {
+        $previousTransactionId = -1;
+        $previousTransactionCodeType = -1;
+        foreach ($transactions as $idx => $transaction) {
+            if ($transaction->getTransactionCodeType() == 9) {
+                throw new \LogicException("transaction code type 9 is not yet implemented");
+            }
+            if ($transaction->getTransactionCodeType() >= 5 && $transaction->getTransactionCodeType() <= 8) {
+                $transactions[$previousTransactionId]->addTransactionDetail($transaction);
+                unset($transactions[$idx]);
+            }
+            if ($transaction->getTransactionCodeType() >= 0 && $transaction->getTransactionCodeType() <= 3) {
+                $previousTransactionId = $idx;
+                $previousTransactionCodeType = $transaction->getTransactionCodeType();
+            }
+        }
+        return $transactions;
+    }
 }

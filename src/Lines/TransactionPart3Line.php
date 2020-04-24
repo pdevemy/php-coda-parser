@@ -7,6 +7,8 @@ use Codelicious\Coda\Values\AccountName;
 use Codelicious\Coda\Values\Message;
 use Codelicious\Coda\Values\SequenceNumber;
 use Codelicious\Coda\Values\SequenceNumberDetail;
+use Codelicious\Coda\Values\NextCode;
+use Codelicious\Coda\Values\LinkCode;
 
 /**
  * @package Codelicious\Coda
@@ -25,19 +27,27 @@ class TransactionPart3Line implements LineInterface
 	private $otherAccountName;
 	/** @var Message */
 	private $message;
+    /** @var NextCode */
+    private $nextCode;
+    /** @var LinkCode */
+    private $linkCode;
 	
 	public function __construct(
 		SequenceNumber $sequenceNumber,
 		SequenceNumberDetail $sequenceNumberDetail,
 		AccountFull $otherAccountNumberAndCurrency,
 		AccountName $otherAccountName,
-		Message $message )
+		Message $message,
+        NextCode $nextCode,
+        LinkCode $linkCode )
 	{
 		$this->sequenceNumber = $sequenceNumber;
 		$this->sequenceNumberDetail = $sequenceNumberDetail;
 		$this->otherAccountNumberAndCurrency = $otherAccountNumberAndCurrency;
 		$this->otherAccountName = $otherAccountName;
 		$this->message = $message;
+        $this->nextCode = $nextCode;
+        $this->linkCode = $linkCode;
 	}
 	
 	public function getType(): LineType
@@ -69,4 +79,14 @@ class TransactionPart3Line implements LineInterface
 	{
 		return $this->message;
 	}
+
+    public function getNextCode(): NextCode
+    {
+        return $this->nextCode;
+    }
+
+    public function getLinkCode(): LinkCode
+    {
+        return $this->linkCode;
+    }
 }

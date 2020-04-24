@@ -41,12 +41,20 @@ class TransactionParser
 		/** @var int $transactionSequence */
         $transactionSequence = 0;
 
+        /** @var int $transactionDetailSequence */
+        $transactionDetailSequence = 0;
+
+        /** @var int $transactionCodeType */
+        $transactionCodeType = 0;
+
 		if ($transactionPart1Line) {
 			$valutaDate = $transactionPart1Line->getValutaDate()->getValue();
 			$transactionDate = $transactionPart1Line->getTransactionDate()->getValue();
 			$amount = $transactionPart1Line->getAmount()->getValue();
             $statementSequence = $transactionPart1Line->getStatementSequenceNumber()->getValue();
             $transactionSequence = $transactionPart1Line->getSequenceNumber()->getValue();
+            $transactionDetailSequence = $transactionPart1Line->getSequenceNumberDetail()->getValue();
+            $transactionCodeType = $transactionPart1Line->getTransactionCode()->getType()->getValue();
 			if ($transactionPart1Line->getMessageOrStructuredMessage()->getStructuredMessage()) {
 				$sepaDirectDebit = $transactionPart1Line->getMessageOrStructuredMessage()->getStructuredMessage()->getSepaDirectDebit();
 			}
@@ -79,6 +87,8 @@ class TransactionParser
 			$account,
             $statementSequence,
             $transactionSequence,
+			$transactionDetailSequence,
+			$transactionCodeType,
 			$transactionDate,
 			$valutaDate,
 			$amount,
@@ -86,6 +96,7 @@ class TransactionParser
 			$structuredMessage,
 			$sepaDirectDebit
 		);
+
 	}
 
 	/**

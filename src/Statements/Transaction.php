@@ -18,6 +18,10 @@ class Transaction
     private $statementSequence;
     /** @var int */
     private $transactionSequence;
+    /** @var int */
+    private $transactionDetailSequence;
+    /** @var int */
+    private $transactionCodeType;
     /** @var DateTime */
     private $transactionDate;
     /** @var DateTime */
@@ -30,11 +34,15 @@ class Transaction
     private $structuredMessage;
     /** @var SepaDirectDebit|null */
     private $sepaDirectDebit;
+    /** @var Transcation[] */
+    private $transactionDetail = [];
 
     /**
      * @param AccountOtherParty $account
      * @param int $statementSequence
      * @param int $transactionSequence
+     * @param int $transactionDetailSequence
+     * @param int $transactionCodeType
      * @param DateTime $transactionDate
      * @param DateTime $valutaDate
      * @param float $amount
@@ -46,6 +54,8 @@ class Transaction
         AccountOtherParty $account,
         int $statementSequence,
         int $transactionSequence,
+        int $transactionDetailSequence,
+        int $transactionCodeType,
         DateTime $transactionDate,
         DateTime $valutaDate,
         float $amount,
@@ -57,6 +67,8 @@ class Transaction
         $this->account = $account;
         $this->statementSequence = $statementSequence;
         $this->transactionSequence = $transactionSequence;
+        $this->transactionDetailSequence = $transactionDetailSequence;
+        $this->transactionCodeType = $transactionCodeType;
         $this->transactionDate = $transactionDate;
         $this->valutaDate = $valutaDate;
         $this->amount = $amount;
@@ -117,5 +129,29 @@ class Transaction
     public function getTransactionSequence(): int
     {
         return $this->transactionSequence;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTransactionDetailSequence(): int
+    {
+        return $this->transactionDetailSequence;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTransactionCodeType(): int
+    {
+        return $this->transactionCodeType;
+    }
+
+    /**
+     * @return void
+     */
+    public function addTransactionDetail(Transaction $transactionDetail): void
+    {
+        $this->transactionDetail[] = $transactionDetail;
     }
 }
